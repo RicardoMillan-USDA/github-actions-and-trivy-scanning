@@ -3,7 +3,7 @@ name: POC - Trivy (fs + config + secrets + image + SBOM)
 on: 
   pull_request:
   push:
-    branches: [ main ]
+    # branches: [ main ]
   workflow_dispatch:
 
 permissions:
