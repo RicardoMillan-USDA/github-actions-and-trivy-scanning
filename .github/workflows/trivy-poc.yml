@@ -38,16 +38,16 @@ jobs:
           ignore-unfixed: true
           version: v0.69.3
 
-      - name: Upload SARIF to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-fs.sarif
+      # - name: Upload SARIF to GitHub Code Scanning
+      #   uses: github/codeql-action/upload-sarif@v4
+      #   with:
+      #     sarif_file: trivy-fs.sarif
 
-#      - name: Upload repo scan artifact
-#        uses: actions/upload-artifact@v6
-#        with:
-#          name: trivy-fs
-#          path: trivy-fs.sarif
+     - name: Upload repo scan artifact
+       uses: actions/upload-artifact@v6
+       with:
+         name: trivy-fs
+         path: trivy-fs.sarif
 
   sbom:
     name: Generate SBOM
