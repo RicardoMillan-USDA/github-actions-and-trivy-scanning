@@ -3,7 +3,7 @@ name: POC - Trivy (fs + config + secrets + image + SBOM)
 on: 
   pull_request:
   push:
-    # branches: [ main ]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
@@ -43,11 +43,11 @@ jobs:
       #   with:
       #     sarif_file: trivy-fs.sarif
 
-     - name: Upload repo scan artifact
-       uses: actions/upload-artifact@v6
-       with:
-         name: trivy-fs
-         path: trivy-fs.sarif
+      - name: Upload repo scan artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: trivy-fs
+          path: trivy-fs.sarif
 
   sbom:
     name: Generate SBOM
