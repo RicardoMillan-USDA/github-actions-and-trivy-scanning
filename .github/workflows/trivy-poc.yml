@@ -78,11 +78,11 @@ jobs:
           name: sbom-cyclonedx
           path: sbom.cdx.json
 
-#  image_scan:
-#    name: Build + scan Docker image
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v6
+  image_scan:
+    name: Build + scan Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
 #
 #      - name: Cache Trivy DB
 #        uses: actions/cache@v5
@@ -92,8 +92,8 @@ jobs:
 #          restore-keys: |
 #           ${{ runner.os }}-trivy-
 
-      # - name: Build Docker image
-      #   run: docker build --build-arg CI=true -t lca-collaboration:poc .
+      - name: Build Docker image
+        run: docker build --build-arg CI=true -t lca-collaboration:poc .
 
       # - name: Trivy image scan (SARIF)
       #   uses: aquasecurity/trivy-action@0.34.0
@@ -109,8 +109,8 @@ jobs:
       #   with:
       #     sarif_file: trivy-image.sarif
 
-      # - name: Upload image scan artifact
-      #   uses: actions/upload-artifact@v6
-      #   with:
-      #     name: trivy-image
-          # path: trivy-image.sarif
+      - name: Upload image scan artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: trivy-image
+          path: trivy-image.sarif
