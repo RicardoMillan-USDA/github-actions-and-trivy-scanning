@@ -96,13 +96,14 @@ jobs:
         run: docker build --build-arg CI=true -t lca-collaboration:poc .
 
       - name: Trivy image scan (SARIF)
-        uses: aquasecurity/trivy-action@0.34.0
+        uses: aquasecurity/trivy-action@0.34.2
         with:
           image-ref: lca-collaboration:poc
           format: sarif
           output: trivy-image.sarif
           severity: HIGH,CRITICAL
           ignore-unfixed: true
+          version: v0.69.3
 
       # - name: Upload SARIF to GitHub Code Scanning
       #   uses: github/codeql-action/upload-sarif@v4
