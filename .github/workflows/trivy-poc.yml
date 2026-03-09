@@ -18,14 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-#      - name: Cache Trivy DB
-#       uses: actions/cache@v5
-#        with:
-#          path: ~/.cache/trivy
-#          key: ${{ runner.os }}-trivy-${{ github.run_id }}
-#          restore-keys: |
-#            ${{ runner.os }}-trivy-
-
       - name: Trivy FS + Config scan (SARIF)
         uses: aquasecurity/trivy-action@0.34.2
         with:
@@ -37,14 +29,11 @@ jobs:
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           version: v0.69.3
-
-      # - name: Upload SARIF to GitHub Code Scanning
-      #   uses: github/codeql-action/upload-sarif@v4
-      #   with:
-      #     sarif_file: trivy-fs.sarif
+          exit-code: 1           # <--- This fails the step if HIGH/CRITICAL vulns found
 
       - name: Upload repo scan artifact
         uses: actions/upload-artifact@v6
+        if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-fs
           path: trivy-fs.sarif
@@ -54,14 +43,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-
-      # - name: Cache Trivy DB
-      #   uses: actions/cache@v5
-      #   with:
-      #     path: ~/.cache/trivy
-      #     key: ${{ runner.os }}-trivy-${{ github.run_id }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-trivy-
 
       - name: Generate SBOM (CycloneDX)
         uses: aquasecurity/trivy-action@0.34.2
@@ -83,14 +64,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-#
-#      - name: Cache Trivy DB
-#        uses: actions/cache@v5
-#        with:
-#          path: ~/.cache/trivy
-#          key: ${{ runner.os }}-trivy-${{ github.run_id }}
-#          restore-keys: |
-#           ${{ runner.os }}-trivy-
 
       - name: Build Docker image
         run: docker build --build-arg CI=true -t lca-collaboration:poc .
@@ -104,14 +77,11 @@ jobs:
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           version: v0.69.3
-
-      # - name: Upload SARIF to GitHub Code Scanning
-      #   uses: github/codeql-action/upload-sarif@v4
-      #   with:
-      #     sarif_file: trivy-image.sarif
+          exit-code: 1
 
       - name: Upload image scan artifact
         uses: actions/upload-artifact@v6
+        if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-image
           path: trivy-image.sarif
