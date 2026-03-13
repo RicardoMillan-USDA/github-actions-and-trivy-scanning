@@ -9,24 +9,17 @@ on:
 permissions:
   contents: read
   security-events: write
+  actions: read
 
 jobs:
   repo_scan:
     name: Repo scan (vuln + secrets + config)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache Trivy DB
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/trivy
-          key: ${{ runner.os }}-trivy-${{ github.run_id }}
-          restore-keys: |
-            ${{ runner.os }}-trivy-
+      - uses: actions/checkout@v6
 
       - name: Trivy FS + Config scan (SARIF)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.34.2
         with:
           scan-type: fs
           scan-ref: .
@@ -35,42 +28,38 @@ jobs:
           output: trivy-fs.sarif
           severity: HIGH,CRITICAL
           ignore-unfixed: true
-
-      - name: Upload SARIF to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: trivy-fs.sarif
+          version: v0.69.3
+          #exit-code: 1           # <--- This fails the step if HIGH/CRITICAL vulns found
 
       - name: Upload repo scan artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
+        if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-fs
           path: trivy-fs.sarif
+
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: trivy-fs.sarif
 
   sbom:
     name: Generate SBOM
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache Trivy DB
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/trivy
-          key: ${{ runner.os }}-trivy-${{ github.run_id }}
-          restore-keys: |
-            ${{ runner.os }}-trivy-
+      - uses: actions/checkout@v6
 
       - name: Generate SBOM (CycloneDX)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.34.2
         with:
           scan-type: fs
           scan-ref: .
           format: cyclonedx
           output: sbom.cdx.json
+          version: v0.69.3
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: sbom-cyclonedx
           path: sbom.cdx.json
@@ -79,35 +68,30 @@ jobs:
     name: Build + scan Docker image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Cache Trivy DB
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/trivy
-          key: ${{ runner.os }}-trivy-${{ github.run_id }}
-          restore-keys: |
-            ${{ runner.os }}-trivy-
+      - uses: actions/checkout@v6
 
       - name: Build Docker image
         run: docker build --build-arg CI=true -t lca-collaboration:poc .
 
       - name: Trivy image scan (SARIF)
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.34.2
         with:
           image-ref: lca-collaboration:poc
           format: sarif
           output: trivy-image.sarif
           severity: HIGH,CRITICAL
           ignore-unfixed: true
-
-      - name: Upload SARIF to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: trivy-image.sarif
+          version: v0.69.3
+          #exit-code: 1
 
       - name: Upload image scan artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
+        if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-image
           path: trivy-image.sarif
+          
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: trivy-image.sarif
