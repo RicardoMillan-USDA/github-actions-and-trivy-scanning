@@ -38,6 +38,11 @@ jobs:
           name: trivy-fs
           path: trivy-fs.sarif
 
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: trivy-fs.sarif
+
   sbom:
     name: Generate SBOM
     runs-on: ubuntu-latest
@@ -85,3 +90,8 @@ jobs:
         with:
           name: trivy-image
           path: trivy-image.sarif
+          
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: trivy-image.sarif
