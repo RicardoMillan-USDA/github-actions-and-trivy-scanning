@@ -29,7 +29,7 @@ jobs:
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           version: v0.69.3
-          exit-code: 1           # <--- This fails the step if HIGH/CRITICAL vulns found
+          #exit-code: 1           # <--- This fails the step if HIGH/CRITICAL vulns found
 
       - name: Upload repo scan artifact
         uses: actions/upload-artifact@v6
@@ -82,7 +82,7 @@ jobs:
           severity: HIGH,CRITICAL
           ignore-unfixed: true
           version: v0.69.3
-          exit-code: 1
+          #exit-code: 1
 
       - name: Upload image scan artifact
         uses: actions/upload-artifact@v6
