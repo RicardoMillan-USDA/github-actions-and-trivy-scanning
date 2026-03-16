@@ -5,6 +5,8 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  # schedule:
+  #   - cron: '15 2 * * 0' #run at 02:15, only on Sunday
 
 permissions:
   contents: read
