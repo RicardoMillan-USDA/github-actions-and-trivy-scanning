@@ -33,7 +33,7 @@ jobs:
 
       - name: Upload repo scan artifact
         uses: actions/upload-artifact@v6
-        if: ${{ always() }}         # <--- This runs regardless of prior step failures
+        #if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-fs
           path: trivy-fs.sarif
@@ -86,7 +86,7 @@ jobs:
 
       - name: Upload image scan artifact
         uses: actions/upload-artifact@v6
-        if: ${{ always() }}         # <--- This runs regardless of prior step failures
+        #if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-image
           path: trivy-image.sarif
