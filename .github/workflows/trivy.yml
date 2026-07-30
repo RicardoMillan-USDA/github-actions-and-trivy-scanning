@@ -34,7 +34,7 @@ jobs:
           #exit-code: 1           # <--- This fails the step if HIGH/CRITICAL vulns found
 
       - name: Upload repo scan artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         #if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-fs
@@ -61,7 +61,7 @@ jobs:
           version: v0.69.3
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: sbom-cyclonedx
           path: sbom.cdx.json
@@ -87,7 +87,7 @@ jobs:
           #exit-code: 1
 
       - name: Upload image scan artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         #if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-image
