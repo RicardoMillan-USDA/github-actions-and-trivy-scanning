@@ -20,9 +20,9 @@ RUN mkdir -p /root/lca-cs
 RUN groupadd tomcat9 \
  && useradd -s /bin/false -g tomcat9 -d /var/lib/tomcat9 tomcat9 \
  && mkdir -p /var/lib/tomcat9 \
- && wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.76/bin/apache-tomcat-9.0.76.tar.gz \
- && tar xzvf apache-tomcat-9.0.76.tar.gz -C /var/lib/tomcat9 --strip-components=1 \
- && rm apache-tomcat-9.0.76.tar.gz \
+ && wget https://archive.apache.org/dist/tomcat/tomcat-9/v9.0.118/bin/apache-tomcat-9.0.118.tar.gz \
+ && tar xzvf apache-tomcat-9.0.118.tar.gz -C /var/lib/tomcat9 --strip-components=1 \
+ && rm apache-tomcat-9.0.118.tar.gz \
  && chgrp -R tomcat9 /var/lib/tomcat9 \
  && chmod -R g+r /var/lib/tomcat9/conf \
  && chmod g+x /var/lib/tomcat9/conf \
