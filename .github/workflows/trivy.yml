@@ -5,6 +5,8 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  # schedule:
+  #   - cron: '15 2 * * 0' #run at 02:15, only on Sunday
 
 permissions:
   contents: read
@@ -19,7 +21,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Trivy FS + Config scan (SARIF)
-        uses: aquasecurity/trivy-action@0.34.2
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scan-ref: .
@@ -32,7 +34,7 @@ jobs:
           #exit-code: 1           # <--- This fails the step if HIGH/CRITICAL vulns found
 
       - name: Upload repo scan artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         #if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-fs
@@ -50,7 +52,7 @@ jobs:
       - uses: actions/checkout@v6
 
       - name: Generate SBOM (CycloneDX)
-        uses: aquasecurity/trivy-action@0.34.2
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scan-ref: .
@@ -59,7 +61,7 @@ jobs:
           version: v0.69.3
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: sbom-cyclonedx
           path: sbom.cdx.json
@@ -74,7 +76,7 @@ jobs:
         run: docker build --build-arg CI=true -t lca-collaboration:poc .
 
       - name: Trivy image scan (SARIF)
-        uses: aquasecurity/trivy-action@0.34.2
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: lca-collaboration:poc
           format: sarif
@@ -85,7 +87,7 @@ jobs:
           #exit-code: 1
 
       - name: Upload image scan artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         #if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-image
