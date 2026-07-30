@@ -30,7 +30,7 @@ jobs:
           output: trivy-fs.sarif
           severity: HIGH,CRITICAL
           ignore-unfixed: true
-          version: v0.69.3
+          version: v0.70.0
           #exit-code: 1           # <--- This fails the step if HIGH/CRITICAL vulns found
 
       - name: Upload repo scan artifact
@@ -58,7 +58,7 @@ jobs:
           scan-ref: .
           format: cyclonedx
           output: sbom.cdx.json
-          version: v0.69.3
+          version: v0.70.0
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@v7
@@ -83,7 +83,7 @@ jobs:
           output: trivy-image.sarif
           severity: HIGH,CRITICAL
           ignore-unfixed: true
-          version: v0.69.3
+          version: v0.70.0
           #exit-code: 1
 
       - name: Upload image scan artifact
