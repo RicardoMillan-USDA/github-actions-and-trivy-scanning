@@ -37,4 +37,5 @@ RUN if [ "$CI" != "true" ]; then \
     fi
 
 # 5. Minimal runtime for CI
+USER tomcat9
 CMD ["sleep", "infinity"]
