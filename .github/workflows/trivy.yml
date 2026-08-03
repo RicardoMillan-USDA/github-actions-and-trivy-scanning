@@ -18,10 +18,10 @@ jobs:
     name: Repo scan (vuln + secrets + config)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Trivy FS + Config scan (SARIF)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
         with:
           scan-type: fs
           scan-ref: .
@@ -34,14 +34,14 @@ jobs:
           #exit-code: 1           # <--- This fails the step if HIGH/CRITICAL vulns found
 
       - name: Upload repo scan artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         #if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-fs
           path: trivy-fs.sarif
 
       - name: Upload SARIF to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v4.37.3
+        uses: github/codeql-action/upload-sarif@bce182f857edf1feab116e9795a3393d21977282 # v4
         with:
           sarif_file: trivy-fs.sarif
 
@@ -49,10 +49,10 @@ jobs:
     name: Generate SBOM
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Generate SBOM (CycloneDX)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
         with:
           scan-type: fs
           scan-ref: .
@@ -61,7 +61,7 @@ jobs:
           version: v0.70.0
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: sbom-cyclonedx
           path: sbom.cdx.json
@@ -70,13 +70,13 @@ jobs:
     name: Build + scan Docker image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
 
       - name: Build Docker image
         run: docker build --build-arg CI=true -t lca-collaboration:poc .
 
       - name: Trivy image scan (SARIF)
-        uses: aquasecurity/trivy-action@v0.36.0
+        uses: aquasecurity/trivy-action@a9c7b0f06e461e9d4b4d1711f154ee024b8d7ab8 # v0.36.0
         with:
           image-ref: lca-collaboration:poc
           format: sarif
@@ -87,13 +87,13 @@ jobs:
           #exit-code: 1
 
       - name: Upload image scan artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         #if: ${{ always() }}         # <--- This runs regardless of prior step failures
         with:
           name: trivy-image
           path: trivy-image.sarif
           
       - name: Upload SARIF to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v4.37.3
+        uses: github/codeql-action/upload-sarif@bce182f857edf1feab116e9795a3393d21977282 # v4
         with:
           sarif_file: trivy-image.sarif
