@@ -41,7 +41,7 @@ jobs:
           path: trivy-fs.sarif
 
       - name: Upload SARIF to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v4.37.3
+        uses: github/codeql-action/upload-sarif@v4.37.7
         with:
           sarif_file: trivy-fs.sarif
 
@@ -94,6 +94,6 @@ jobs:
           path: trivy-image.sarif
           
       - name: Upload SARIF to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v4.37.3
+        uses: github/codeql-action/upload-sarif@v4.37.7
         with:
           sarif_file: trivy-image.sarif
